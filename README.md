@@ -13,10 +13,8 @@ The pattern protects the root context from raw logs and broad searches, prevents
 
 ## Install from GitHub
 
-After this repository is published, replace `OWNER/REPOSITORY` with its GitHub path:
-
 ```bash
-codex plugin marketplace add OWNER/REPOSITORY
+codex plugin marketplace add Vishnuraj910/codex-orchestrator
 codex plugin add orchestrator-pattern@codex-orchestrator
 ```
 
@@ -31,8 +29,8 @@ Then open `/hooks`, review the advisory hook, trust it, and start another new ta
 ## Install from a local clone
 
 ```bash
-git clone <repository-url>
-cd Orchestrator
+git clone https://github.com/Vishnuraj910/codex-orchestrator.git
+cd codex-orchestrator
 ./install.sh
 ```
 
