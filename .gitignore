@@ -1,3 +1,38 @@
+# Operating systems
 .DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Editors and local IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python tooling
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and temporary output
+*.log
+*.tmp
+tmp/
+temp/
