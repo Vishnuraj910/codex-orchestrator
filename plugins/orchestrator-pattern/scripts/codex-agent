@@ -1,0 +1,61 @@
+#!/bin/bash
+set -u
+
+usage() {
+  printf 'Usage: codex-agent <scout|verifier|implementer> <absolute-working-directory> <task>\n' >&2
+}
+
+if [ "$#" -lt 2 ]; then usage; exit 64; fi
+
+role=$1
+working_directory=$2
+shift 2
+
+case "$role" in
+  scout|verifier|implementer) ;;
+  *) printf 'codex-agent: unsupported role: %s\n' "$role" >&2; usage; exit 64 ;;
+esac
+
+if [ ! -d "$working_directory" ]; then
+  printf 'codex-agent: working directory does not exist: %s\n' "$working_directory" >&2
+  exit 66
+fi
+
+case "$working_directory" in
+  /*) ;;
+  *) printf 'codex-agent: working directory must be absolute: %s\n' "$working_directory" >&2; exit 64 ;;
+esac
+
+if [ "$#" -gt 0 ]; then
+  task=$*
+elif [ ! -t 0 ]; then
+  task=$(cat)
+else
+  printf 'codex-agent: task is required\n' >&2
+  usage
+  exit 64
+fi
+
+if [ -z "$task" ]; then printf 'codex-agent: task must not be empty\n' >&2; exit 64; fi
+
+output_file=$(mktemp "${TMPDIR:-/tmp}/codex-agent-output.XXXXXX") || exit 70
+log_file=$(mktemp "${TMPDIR:-/tmp}/codex-agent-log.XXXXXX") || { rm -f "$output_file"; exit 70; }
+trap 'rm -f "$output_file" "$log_file"' EXIT
+
+command=(codex exec --strict-config --ephemeral --profile "$role" --output-last-message "$output_file" -C "$working_directory")
+if ! git -C "$working_directory" rev-parse --is-inside-work-tree >/dev/null 2>&1; then command+=(--skip-git-repo-check); fi
+
+if "${command[@]}" "$task" >"$log_file" 2>&1; then
+  if [ -s "$output_file" ]; then
+    cat "$output_file"
+  else
+    printf 'codex-agent: %s completed without a final message\n' "$role" >&2
+    tail -n 40 "$log_file" >&2
+    exit 70
+  fi
+else
+  status=$?
+  printf 'codex-agent: %s failed with exit code %s\n' "$role" "$status" >&2
+  tail -n 40 "$log_file" >&2
+  exit "$status"
+fi

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrator Pattern"
+  short_description: "Coordinate model-routed Codex workers"
+  default_prompt: "Use $orchestrator-pattern to split this task into scoped worker roles and verify the result."

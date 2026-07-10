@@ -1,0 +1,23 @@
+{
+  "name": "orchestrator-pattern",
+  "version": "0.1.0",
+  "description": "Coordinate complex Codex work through scoped, model-routed worker roles and evidence-based verification.",
+  "author": {
+    "name": "Codex Orchestrator Contributors"
+  },
+  "license": "MIT",
+  "keywords": ["orchestration", "subagents", "delegation", "verification"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Orchestrator Pattern",
+    "shortDescription": "Model-routed delegation for Codex",
+    "longDescription": "Split noisy or independent work into scout, verifier, and implementer roles while keeping planning, judgment, and final verification in the root task.",
+    "developerName": "Codex Orchestrator Contributors",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Use the orchestrator pattern to split and verify this task.",
+      "Delegate exploration, implementation, and checks to scoped workers."
+    ]
+  }
+}
